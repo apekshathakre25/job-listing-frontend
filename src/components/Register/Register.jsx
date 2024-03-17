@@ -22,10 +22,11 @@ export default function Register() {
   const handleSubmit = async () => {
     if (!formData.email || !formData.password || !formData.name) {
       alert("Fields can't be empty");
+      return;
     }
 
     const response = await registerUser({ ...formData });
-    alert(response);
+    alert(response.message);
   };
 
   return (

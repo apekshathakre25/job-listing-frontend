@@ -24,13 +24,11 @@ const Login = () => {
     try {
       const response = await loginUser(formData.email, formData.password);
       console.log(response);
+      // alert(response.message);
+      navigate("/");
     } catch (error) {
       setError("Invalid credentials. Please try again.");
       console.error("Login failed:", error);
-    }
-
-    if (response.name) {
-      navigate("/");
     }
   };
 
@@ -60,7 +58,11 @@ const Login = () => {
       {error && <p className={styles.error}>{error}</p>}
       <p className={styles.footer}>
         Don&apos;t have an account?
-        <span className={styles.underline}>Sign Up</span>
+        <span
+          className={styles.underline}
+          onClick={() => navigate("/register")}>
+          Sign Up
+        </span>
       </p>
     </div>
   );
