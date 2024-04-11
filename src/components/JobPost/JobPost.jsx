@@ -40,24 +40,19 @@ export const JobPost = () => {
   };
 
   const removeSkills = (skillToRemove) => {
-    // Filter out the skill to remove from the formData.skills array
     const updatedSkills = formData.skills.filter(
       (skill) => skill !== skillToRemove
     );
 
-    // Update the formData state with the updated skills array
     setFormData({
       ...formData,
       skills: updatedSkills,
     });
   };
 
-  useEffect(() => {
-    console.log(formData);
-  }, [formData]);
 
   const handleSubmit = async (event) => {
-    event.preventDefault(); // Prevent default form submission behavior
+    event.preventDefault();
     if (
       !formData.companyName ||
       !formData.title ||
@@ -69,11 +64,17 @@ export const JobPost = () => {
       !formData.duration ||
       !formData.skills
     ) {
-      return res.status(401).json({ errorMessage: "all feild are required" });
+      alert("Please fill in all fields.");
+      return;
     }
     await createJobPost(formData);
   };
 
+  
+  useEffect(() => {
+    console.log(formData);
+  }, [formData]);
+  
   return (
     <div className={styles.container}>
       <h1 className={styles.h1}>Add job description</h1>
