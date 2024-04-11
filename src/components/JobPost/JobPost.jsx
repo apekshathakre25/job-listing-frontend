@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styles from "../JobPost/JobPost.module.css";
 import { DEFAULT_SKILLS } from "../../utils/constant";
+import { useEffect } from "react";
 
 export const JobPost = () => {
   const [formData, setFormData] = useState({
@@ -13,8 +14,8 @@ export const JobPost = () => {
     location: "",
     description: "",
     about: "",
-    skillsRequired: "",
     information: "",
+    skills: [],
   });
 
   const handleChange = (event) => {
@@ -24,25 +25,38 @@ export const JobPost = () => {
     });
   };
 
+  const addSkills = (event) => {
+    const skill = event.target.value;
+    const actualSkills = formData.skills;
+    const skillExists = actualSkills.includes(skill);
+    if (!skillExists) {
+      const updatedSkills = [...formData.skills, skill];
+      setFormData({
+        ...formData,
+        skills: updatedSkills,
+      });
+    }
+  };
+
+  const removeSkills = (skillToRemove) => {
+    // Filter out the skill to remove from the formData.skills array
+    const updatedSkills = formData.skills.filter(
+      (skill) => skill !== skillToRemove
+    );
+
+    // Update the formData state with the updated skills array
+    setFormData({
+      ...formData,
+      skills: updatedSkills,
+    });
+  };
+
+  useEffect(() => {
+    console.log(formData);
+  }, [formData]);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    if (
-      !formData.companyName ||
-      !formData.logoURL ||
-      !formData.position ||
-      !formData.salary ||
-      !formData.jobType ||
-      !formData.remote ||
-      !formData.location ||
-      !formData.description ||
-      !formData.about ||
-      !formData.skillsRequired ||
-      !formData.information
-    ) {
-      alert("Please fill in all fields.");
-      return;
-    }
   };
 
   return (
@@ -182,7 +196,7 @@ export const JobPost = () => {
             className={styles.input}
             type="text"
             name="skills"
-            onChange={ handleChange}>
+            onChange={addSkills}>
             <option disabled selected>
               Please select skills
             </option>
@@ -190,6 +204,14 @@ export const JobPost = () => {
               <option>{element}</option>
             ))}
           </select>
+        </div>
+        <div>
+          {/* Render skills and remove button */}
+          {formData.skills.map((skill, index) => (
+            <span key={index}>
+              {skill} <button onClick={() => removeSkills(skill)}>X</button>
+            </span>
+          ))}
         </div>
 
         <div className={styles.formGroup}>
