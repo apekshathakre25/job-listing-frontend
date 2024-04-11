@@ -2,20 +2,21 @@ import { useState } from "react";
 import styles from "../JobPost/JobPost.module.css";
 import { DEFAULT_SKILLS } from "../../utils/constant";
 import { useEffect } from "react";
+import { createJobPost } from "../../api/job";
 
 export const JobPost = () => {
   const [formData, setFormData] = useState({
     companyName: "",
+    title: "",
     logoURL: "",
-    position: "",
     salary: "",
     jobType: "",
     remote: "",
     location: "",
     description: "",
-    about: "",
-    information: "",
     skills: [],
+    locationType: "",
+    duration: "",
   });
 
   const handleChange = (event) => {
@@ -56,7 +57,21 @@ export const JobPost = () => {
   }, [formData]);
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
+    event.preventDefault(); // Prevent default form submission behavior
+    if (
+      !formData.companyName ||
+      !formData.title ||
+      !formData.logoURL ||
+      !formData.description ||
+      !formData.salary ||
+      !formData.location ||
+      !formData.locationType ||
+      !formData.duration ||
+      !formData.skills
+    ) {
+      return res.status(401).json({ errorMessage: "all feild are required" });
+    }
+    await createJobPost(formData);
   };
 
   return (
@@ -92,14 +107,14 @@ export const JobPost = () => {
         </div>
 
         <div className={styles.formGroup}>
-          <label className={styles.label} htmlFor="position">
-            Position:
+          <label className={styles.label} htmlFor="title">
+            title:
           </label>
           <input
             className={styles.input}
             type="text"
-            name="position"
-            value={formData.position}
+            name="title"
+            value={formData.title}
             onChange={handleChange}
             placeholder="Enter job position"
           />
@@ -176,15 +191,15 @@ export const JobPost = () => {
         </div>
 
         <div className={styles.formGroup}>
-          <label className={styles.label} htmlFor="about">
-            About:
+          <label className={styles.label} htmlFor="duration">
+            Duration:
           </label>
           <textarea
             className={styles.input}
-            name="about"
-            value={formData.about}
+            name="duration"
+            value={formData.duration}
             onChange={handleChange}
-            placeholder="Enter company description"
+            placeholder="Enter duration"
           />
         </div>
 
@@ -215,16 +230,16 @@ export const JobPost = () => {
         </div>
 
         <div className={styles.formGroup}>
-          <label className={styles.label} htmlFor="skills">
-            Information:
+          <label className={styles.label} htmlFor="locationType">
+            locationType:
           </label>
           <input
             className={styles.input}
             type="text"
-            name="information"
-            value={formData.information}
+            name="locationType"
+            value={formData.locationType}
             onChange={handleChange}
-            placeholder="information"
+            placeholder="locationType"
           />
         </div>
       </div>

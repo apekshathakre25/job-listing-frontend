@@ -11,3 +11,16 @@ export const getJobDetailsById = async (jobID) => {
     console.log(error);
   }
 };
+
+export const createJobPost = async (requestPayload) => {
+  try {
+    const reqUrl = `${backEndUrl}/job/create`;
+    const token = localStorage.getItem("token");
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    const response = await axios.post(reqUrl, requestPayload);
+    // console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
