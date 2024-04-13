@@ -23,8 +23,10 @@ const Login = () => {
 
     try {
       const response = await loginUser(formData.email, formData.password);
-      console.log(response);
-      // alert(response.message);
+      console.log("response", response);
+
+      localStorage.setItem("token", response?.token);
+      console.log("token", response.token)
       navigate("/");
     } catch (error) {
       setError("Invalid credentials. Please try again.");

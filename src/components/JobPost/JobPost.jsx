@@ -8,7 +8,7 @@ export const JobPost = () => {
   const [formData, setFormData] = useState({
     companyName: "",
     title: "",
-    logoURL: "",
+    logoUrl: "",
     salary: "",
     jobType: "",
     remote: "",
@@ -56,7 +56,7 @@ export const JobPost = () => {
     if (
       !formData.companyName ||
       !formData.title ||
-      !formData.logoURL ||
+      !formData.logoUrl ||
       !formData.description ||
       !formData.salary ||
       !formData.location ||
@@ -66,14 +66,15 @@ export const JobPost = () => {
     ) {
       alert("Please fill in all fields.");
       return;
+      
     }
-    await createJobPost(formData);
+    console.log(formData)
+      await createJobPost(formData);
   };
 
-  
-  useEffect(() => {
-    console.log(formData);
-  }, [formData]);
+  // useEffect(() => {
+  //   console.log(formData);
+  // }, [formData]);
   
   return (
     <div className={styles.container}>
@@ -94,14 +95,14 @@ export const JobPost = () => {
         </div>
 
         <div className={styles.formGroup}>
-          <label className={styles.label} htmlFor="logoURL">
+          <label className={styles.label} htmlFor="logoUrl">
             Logo URL:
           </label>
           <input
             className={styles.input}
             type="text"
-            name="logoURL"
-            value={formData.logoURL}
+            name="logoUrl"
+            value={formData.logoUrl}
             onChange={handleChange}
             placeholder="Enter logo URL"
           />
