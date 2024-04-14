@@ -24,3 +24,16 @@ export const createJobPost = async (requestPayload) => {
     console.log(error);
   }
 };
+
+export const updateJobPost = async (jobID, updatedData) => {
+  try {
+    const reqUrl = `${backEndUrl}/job/edit/${jobID}`;
+    const token = localStorage.getItem("token");
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    const response = await axios.put(reqUrl, updatedData);
+    // console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};

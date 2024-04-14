@@ -1,22 +1,27 @@
 import { useState } from "react";
 import styles from "../JobPost/JobPost.module.css";
 import { DEFAULT_SKILLS } from "../../utils/constant";
-import { useEffect } from "react";
-import { createJobPost } from "../../api/job";
+import { createJobPost, updateJobPost } from "../../api/job";
+import { useLocation } from "react-router-dom";
+
 
 export const JobPost = () => {
+  const { state } = useLocation();
+  const [stateData] = useState(state?.jobDetails);
+  console.log(stateData);
+
   const [formData, setFormData] = useState({
-    companyName: "",
-    title: "",
-    logoUrl: "",
-    salary: "",
-    jobType: "",
-    remote: "",
-    location: "",
-    description: "",
-    skills: [],
-    locationType: "",
-    duration: "",
+    companyName: "" || stateData?.companyName,
+    title: "" || stateData?.title,
+    logoUrl: "" || stateData?.logoUrl,
+    salary: "" || stateData?.salary,
+    jobType: "" || stateData?.jobType,
+    remote: "" || stateData?.remote,
+    location: "" || stateData?.location,
+    description: "" || stateData?.description,
+    skills: stateData?.skills || [],
+    locationType: "" || stateData?.locationType,
+    duration: "" || stateData?.duration,
   });
 
   const handleChange = (event) => {
@@ -50,7 +55,6 @@ export const JobPost = () => {
     });
   };
 
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (
@@ -66,16 +70,17 @@ export const JobPost = () => {
     ) {
       alert("Please fill in all fields.");
       return;
-      
     }
-    console.log(formData)
-      await createJobPost(formData);
+    if (state?.edit) {
+      updateJobPost(state?.id, formData);
+    }
+    await createJobPost(formData);
   };
 
   // useEffect(() => {
   //   console.log(formData);
   // }, [formData]);
-  
+
   return (
     <div className={styles.container}>
       <h1 className={styles.h1}>Add job description</h1>
@@ -246,7 +251,7 @@ export const JobPost = () => {
         </div>
       </div>
       <button onClick={handleSubmit} className={styles.add}>
-        + Add Job
+        {state?.edit ? "Edit Job" : "   + Add Job"}
       </button>
       <button className={styles.cancel}>Cancel</button>
     </div>
