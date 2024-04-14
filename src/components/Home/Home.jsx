@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { getAllJobs } from "../../api/job";
 import styles from "../Home/Home.module.css";
 import { DEFAULT_SKILLS } from "../../utils/constant";
@@ -7,9 +8,12 @@ const Home = () => {
   const [jobs, setJobs] = useState([]);
   const [skills, setSkills] = useState([]);
   const [title, setTitle] = useState("");
+  const [token] = useState(localStorage.getItem("token"));
+  const navigate = useNavigate();
 
   const fetchJobDetailsById = async () => {
-    const response = await getAllJobs({ skills, title });
+    const filteredSkills = skills.join(",");
+    const response = await getAllJobs({ skills: filteredSkills, title });
     setJobs(response.data);
   };
 
@@ -17,10 +21,26 @@ const Home = () => {
     fetchJobDetailsById();
   }, []);
 
+  const handleSkill = (event) => {
+    const newArr = skills.filter((skill) => skill === event.target.value);
+    if (newArr.length === 0) {
+      setSkills([...skills, event.target.value]);
+    }
+  };
+
+  const removeSkill = (selectedSkills) => {
+    const newArr2 = skills.filter((skill) => skill == !selectedSkills);
+    setSkills([...newArr2]);
+  };
+
+  const handleLogOut = () => {
+    localStorage.clear();
+    navigate("/login");
+  };
   return (
     <>
       <div className={styles.container}>
-        {/* {token ? <button onClick={handleLogout}>Logout</button> : ""} */}
+        {token ? <button onClick={handleLogOut}>Logout</button> : " "}
         <div className={styles.containerTop}>
           <input
             className={styles.inputTop}
@@ -33,7 +53,7 @@ const Home = () => {
         </div>
         <div className={styles.containerBottom}>
           <select
-            // onChange={handleSkill}
+            onChange={handleSkill}
             className={styles.inputSelect}
             name="remote">
             <option value="">Skills</option>
@@ -47,11 +67,11 @@ const Home = () => {
             return (
               <span className={styles.chip} key={skill}>
                 {skill}
-                {/* <span
+                <span
                   onClick={() => removeSkill(skill)}
                   className={styles.cross}>
                   X
-                </span> */}
+                </span>
               </span>
             );
           })}

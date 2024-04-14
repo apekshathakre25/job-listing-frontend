@@ -5,6 +5,7 @@ import JobDetailsPage from "./Pages/JobDetailsPage/JobDetailsPage";
 import JobPostPage from "./Pages/JobPostPage/JobPostPage";
 import HomePage from "./Pages/HomePage/HomePage";
 
+
 function App() {
   return (
     <BrowserRouter>
